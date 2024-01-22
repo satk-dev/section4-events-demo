@@ -1,5 +1,30 @@
+# Name will be displayed in the workflow tab on Github
 name: Events Demo 1
-on: ...
+# Run-Name will be displayed when the workflow is running, with no run-name specified it will default to the commit message
+run-name: Events Demo
+on: 
+  pull_request:
+    # Activity Type, check out the official docs for more info. Can be listed as "types:[type1, type2] or as an json array"
+    types:
+      - opened
+    # This further narrows down the trigger. Workflow to be triggered when a Pull Request is opened on a partcular branch
+    branches: # Can also use 'branches-ignore' to trigger workflow on everything besides a particular branch
+      - master
+  workflow_dispatch:
+  push:
+    # This is a event filter. 
+    branches: 
+      # Explicit branch name
+      - master
+      # Mean any branch that starts with dev-<followed by any other words>. Ie. dev-new or dev-this-is-new
+      - 'dev-*' 
+      # Means any branch the starts with feat/<followed by any other CHARACTERS including more slashes>. The double ** means can include more slashes
+      # Ie. feat/new or feat/new/button
+      - 'feat/**'
+    # Workflow will be triggered if we push to 1 of the 3 branches listed above, ONLY if we also DIDN't make changes to the github workflows
+    paths-ignore:
+      -  '.github/workflows/*'
+    
 jobs:
   deploy:
     runs-on: ubuntu-latest
